@@ -1,3 +1,3 @@
-# CasaNet
+# AnsiblePlaybooks
 
-Repository for scripts and files useful for the HomeLab
+Repository for scripts and files I find useful for my HomeLab
