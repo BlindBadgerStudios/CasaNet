@@ -1,8 +1,9 @@
+
 version: '3.8'
 
 services:
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:latest
     container_name: uptime-kuma
     volumes:
       - nfs:/app/data #Note: Make this volume ahead of time or else comment out the volume section below
