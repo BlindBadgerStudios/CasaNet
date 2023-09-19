@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    volumes:
+      - nfs:/app/data #Note: Make this volume ahead of time or else comment out the volume section below
+    ports:
+      - "3001:3001"  # <Host Port>:<Container Port>
+    restart: always
+
+# Use an existing volume
+#volumes:
+#  nfs_uptime-kuma:
+#    external: true
+
+# Create your own local volume
+#volumes:
+#  nfs_uptime-kuma: 
+
+# Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
+volumes: 
+  nfs: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH} 
