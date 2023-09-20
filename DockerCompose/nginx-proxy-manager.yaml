@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  uptime-kuma:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    volumes:
+      - nfs-data:/data
+      - nfs-letsencrypt:/etc/letsencrypt
+    ports: # <Host Port>:<Container Port>
+      - "80:80" # For proxying on HTTP
+      - "443:443" # For proxying on HTTPS
+      - "81:81" # For the admin portal
+    
+
+# Option 1: Use an existing volume
+#volumes:
+#  MYVOLUMENAME: # Replace this with your existing volume name
+#    external: true
+
+# Options 2: Create your own local volume
+#volumes:
+#  nginx-proxy-manager: 
+
+# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
+volumes: 
+  nfs-data: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}/data # Path for the NPM data folder
+  nfs-letsencrypt: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}/etc-letsencrypt # Path for the NPM LetsEncrypt folder
