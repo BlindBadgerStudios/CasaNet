@@ -4,11 +4,12 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma:latest
     container_name: uptime-kuma
+    restart: always
     volumes:
       - nfs:/app/data # match the first part to the volume section that is uncommented below
     ports:
       - "3001:3001"  # <Host Port>:<Container Port>
-    restart: always
+    
 
 # Option 1: Use an existing volume
 #volumes:
