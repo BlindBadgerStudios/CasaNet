@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  uptime-kuma:
+  adminer:
     image: adminer:latest
     container_name: adminer
     restart: always
