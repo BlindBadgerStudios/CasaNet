@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    restart: always
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - nfs:/data
+    ports: # <Host Port>:<Container Port>
+      - "1880:1880" # Main UI
+
+# Option 1: Use an existing volume
+#volumes:
+#  MYVOLUMENAME: # Replace this with your existing volume name
+#    external: true
+
+# Options 2: Create your own local volume
+#volumes:
+#  nodered: 
+
+# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
+volumes: 
+  nfs: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH} # Path for the NPM data folder
