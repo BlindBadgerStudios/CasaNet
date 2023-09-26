@@ -4,7 +4,7 @@ services:
   nginx-proxy-manager:
     image: jc21/nginx-proxy-manager:latest
     container_name: nginx-proxy-manager
-    restart: unless-stopped
+    restart: always
     volumes:
       - nfs-data:/data
       - nfs-letsencrypt:/etc/letsencrypt
