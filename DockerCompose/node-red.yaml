@@ -4,7 +4,7 @@ services:
   nodered:
     image: nodered/node-red:latest
     container_name: nodered
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=America/Los_Angeles
     volumes:
