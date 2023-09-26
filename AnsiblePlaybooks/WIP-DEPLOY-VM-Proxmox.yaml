@@ -20,7 +20,7 @@
         clone: "{{ templateName }}"
         full: yes
         name: "{{ vmName }}"
-        node: pm1
+        node: {{ proxmox_host }}
         format: qcow2
         timeout: 500 # Note: This can take a while, adjust as necessary
 
@@ -30,5 +30,5 @@
         api_password: 
         api_host: pm1.carouselsystems.net 
         name: "{{ vmName }}"
-        node: pm1
+        node: {{ proxmox_host }}
         state: started
