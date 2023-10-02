@@ -32,10 +32,4 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
-      device: :${NFS_PATH}/data # Path for the NPM data folder
-  nfs-letsencrypt: 
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
-      device: :${NFS_PATH}/etc-letsencrypt # Path for the NPM LetsEncrypt folder
+      device: :${NFS_PATH}/homebridge # Path for the NPM data folder
