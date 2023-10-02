@@ -1,6 +1,6 @@
 # Note: Because of the "host" networking requirements, I do not recommend using this in docker swarm.
 # Just ensure the data is stored to the NFS share and you can spin up-down containers on multiple hosts to "migrate" it during scheduled maintenance.
-version: '2'
+version: '3.8'
 
 services:
   homebridge:
