@@ -12,7 +12,7 @@ services:
     environment:
       - TZ=America/Los_Angeles
     volumes:
-      - /volume1/docker/immich/redis:/data
+      - nfs-redis:/data
     restart: on-failure:5
 
   immich-db:
@@ -27,7 +27,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - /volume1/docker/immich/db:/var/lib/postgresql/data
+      - nfs-db:/var/lib/postgresql/data
     environment:
       - TZ=America/Los_Angeles
       - POSTGRES_DB=immich
@@ -48,7 +48,7 @@ services:
     ports:
       - 8212:3001
     volumes:
-      - /volume1/docker/immich/upload:/usr/src/app/upload
+      - nfs-upload:/usr/src/app/upload
     restart: on-failure:5
     depends_on:
       immich-redis:
@@ -67,8 +67,8 @@ services:
     env_file:
       - stack.env
     volumes:
-      - /volume1/docker/immich/upload:/usr/src/app/upload
-      - /volume1/docker/immich/micro:/usr/src/app/.reverse-geocoding-dump
+      - nfs-upload:/usr/src/app/upload
+      - nfs-micro:/usr/src/app/.reverse-geocoding-dump
     restart: on-failure:5
     depends_on:
       immich-redis:
@@ -86,9 +86,51 @@ services:
     env_file:
       - stack.env
     volumes:
-      - /volume1/docker/immich/upload:/usr/src/app/upload
-      - /volume1/docker/immich/cache:/cache
+      - nfs-upload:/usr/src/app/upload
+      - nfs-cache:/cache
     restart: on-failure:5
     depends_on:
       immich-db:
         condition: service_started
+
+# Option 1: Use an existing volume
+#volumes:
+#  MYVOLUMENAME: # Replace this with your existing volume name
+#    external: true
+
+# Options 2: Create your own local volume
+#volumes:
+#  nginx-proxy-manager: 
+
+# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
+volumes: 
+  nfs-redis: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}/immich/redis # Path for the redis folder
+  nfs-db:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}/immich/db # Path for the db folder
+  nfs-upload:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}/immich/upload # Path for the upload folder
+  nfs-micro:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}/immich/micro # Path for the micro folder
+  nfs-cache:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}/immich/cache # Path for the cache folder
