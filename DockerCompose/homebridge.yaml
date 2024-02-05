@@ -27,7 +27,7 @@ services:
 
 # Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
 volumes: 
-  nfs-data: 
+  nfs-homebridge: 
     driver: local
     driver_opts:
       type: nfs
