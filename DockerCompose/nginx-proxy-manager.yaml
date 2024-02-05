@@ -12,8 +12,11 @@ services:
       - "80:80" # For proxying on HTTP
       - "443:443" # For proxying on HTTPS
       - "81:81" # For the admin portal
+#    networks:
+#      macvlan_network:
+#        ipv4_address: ${STATIC_IP}
     
-
+#VOLUME CONFIGS
 # Option 1: Use an existing volume
 #volumes:
 #  MYVOLUMENAME: # Replace this with your existing volume name
@@ -37,3 +40,16 @@ volumes:
       type: nfs
       o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
       device: :${NFS_PATH}/letsencrypt # Path for the NPM LetsEncrypt folder
+
+#NETWORK CONFIGS
+#networks:
+#  macvlan_network:
+#    driver: macvlan
+#    driver_ops:
+#      parent: eth0
+#    ipam: 
+#      driver: default
+#      config:
+#        - subnet: 192.168.192.0/22
+#          ip_range: 192.168.192.0/22
+#          gateway: 192.168.192.1
