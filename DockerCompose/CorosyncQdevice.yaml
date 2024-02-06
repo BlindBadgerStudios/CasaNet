@@ -5,7 +5,7 @@ version: '3.8'
 
 services:
   dashy:
-    image: lmodelrockettier/corosync-qnetd:latest
+    image: modelrockettier/corosync-qnetd:latest
     container_name: proxmox-qdevice
     volumes:
       - nfs-corosync:/etc/corosync # match the first part to the volume section that is uncommented below
