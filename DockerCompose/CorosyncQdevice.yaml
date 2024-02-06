@@ -4,7 +4,7 @@
 version: '3.8'
 
 services:
-  dashy:
+  corosync-qnetd:
     image: modelrockettier/corosync-qnetd:latest
     container_name: proxmox-qdevice
     volumes:
