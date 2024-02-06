@@ -1,0 +1,38 @@
+# Based on the config instructions here: https://github.com/modelrockettier/docker-corosync-qnetd
+# or here: https://hub.docker.com/r/modelrockettier/corosync-qnetd
+# (make sure to follow the steps in the instructions, starting with step 3 from a console to the docker host)
+version: '3.8'
+
+services:
+  dashy:
+    image: lmodelrockettier/corosync-qnetd:latest
+    container_name: proxmox-qdevice
+    volumes:
+      - nfs:/etc/corosync # match the first part to the volume section that is uncommented below
+    environment:
+      - CLUSTER_NAME=${CLUSTER_NAME}
+      - PROXMOX_NODE=${PROXMOX_NODE} #creds to ssh into the first proxmox node
+    ports:
+      - "5403:5403"  # <Host Port>:<Container Port>
+    cap_drop:
+      - ALL
+    restart: always
+
+
+# Option 1: Use an existing volume
+#volumes:
+#  MYVOLUMENAME: # Replace this with your existing volume name
+#    external: true
+
+# Options 2: Create your own local volume
+#volumes:
+#  nginx-proxy-manager: 
+
+# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
+volumes: 
+  nfs-redis: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH} # Path for the config data folder (e.g. /volume1/docker/corosync)
