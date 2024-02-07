@@ -6,7 +6,7 @@ services:
     container_name: homepage
     restart: always
     volumes:
-      - /nfs-config:/app/config # Make sure your local config directory exists
+      - nfs-config:/app/config # Make sure your local config directory exists
       - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
     ports: # <Host Port>:<Container Port>
       - "3000:3000" # For primary interface
