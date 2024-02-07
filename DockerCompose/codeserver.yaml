@@ -13,7 +13,7 @@ services:
     ports:
       - 8377:8443
     volumes:
-      - nfs-codeserver:/config:rw
+      - nfs-codeserver:/config
     environment:
       TZ: America/Los_Angeles
       #PROXY_DOMAIN: codeserver.yourname.synology.me
