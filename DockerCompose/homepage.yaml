@@ -31,7 +31,7 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
-      device: :${NFS_PATH} # Path for the folder
+      device: :${NFS_PATH}/ # Path for the folder 
 
 #NETWORK CONFIGS
 #networks:
