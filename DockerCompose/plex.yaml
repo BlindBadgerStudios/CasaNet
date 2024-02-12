@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  codeserver:
+    container_name: Code-Server
+    image: ghcr.io/linuxserver/plex
+    hostname: plex.wells.family
+    network_mode: host
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+     test: wget --no-verbose --tries=1 --spider http://localhost:32400/web
+    cpu_shares: 1024
+    mem_limit: 4g
+    restart: on-failure:5
+    volumes:
+      - local-plexconfig:/config:rw
+      - nfs-plexlibrary:/moviles:ro
+    environment:
+      TZ: America/Los_Angeles
+      PUID: 1026
+      PGID: 100
+      VERSION: public
+      PLEX_CLAIM: ${PLEX_CLAIM_CODE}
+
+volumes:
+  local-plexconfig: #Must be a locally bound location, NFS causes corruption for the DB
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${LIBRARY_PATH}
+  nfs-plexlibrary: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH} # Path for the config data folder (e.g. /volume1/docker/corosync)
