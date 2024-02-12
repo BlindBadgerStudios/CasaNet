@@ -11,7 +11,7 @@ services:
       - "8080:80"  # <Host Port>:<Container Port>
     restart: unless-stopped
     environment:
-        - TZ: America/Los_Angeles
+        TZ: America/Los_Angeles
 
 volumes: 
   nfs-organizr-configs: 
