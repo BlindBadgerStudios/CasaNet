@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  sonarr:
+    container_name: Sonarr
+    image: ghcr.io/linuxserver/sonarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - 8377:8443
+    volumes:
+      - nfs-sonarr:/config
+    environment:
+      TZ: America/Los_Angeles
+      PUID: 1026
+      PGID: 100
+
+volumes:
+  nfs-sonarr:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH} # Path for the config data folder (e.g. /volume1/docker/corosync)
