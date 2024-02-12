@@ -1,8 +1,8 @@
 version: "3.9"
 services:
-  codeserver:
+  plex:
     container_name: Plex
-    image: ghcr.io/linuxserver/plex
+    image: ghcr.io/linuxserver/plex:latest
     hostname: plex.wells.family
     network_mode: host
     security_opt:
