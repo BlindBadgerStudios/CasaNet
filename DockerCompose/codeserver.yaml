@@ -3,10 +3,6 @@ services:
   codeserver:
     container_name: Code-Server
     image: ghcr.io/linuxserver/code-server
-    #healthcheck:
-    # test: curl -f http://localhost:8443/ || exit 1
-    #mem_limit: 6g
-    #cpu_shares: 768
     security_opt:
       - no-new-privileges:false
     restart: on-failure:5
@@ -20,16 +16,6 @@ services:
       PASSWORD: ${PASS}
       SUDO_PASSWORD: ${SUDO_PASS}
 
-# Option 1: Use an existing volume
-#volumes:
-#  MYVOLUMENAME: # Replace this with your existing volume name
-#    external: true
-
-# Options 2: Create your own local volume
-#volumes:
-#  nginx-proxy-manager: 
-
-# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
 volumes: 
   nfs-codeserver: 
     driver: local
