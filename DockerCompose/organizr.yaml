@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  organizr:
+    image: organizr/organizr:latest
+    container_name: organizr
+    hostname: organizr
+    volumes:
+      - nfs-organizr-configs:/app/data/configs
+    ports:
+      - "8080:80"  # <Host Port>:<Container Port>
+    restart: unless-stopped
+    environment:
+        - TZ: America/Los_Angeles
+
+volumes: 
+  nfs-organizr-configs: 
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
+      device: :${NFS_PATH}
