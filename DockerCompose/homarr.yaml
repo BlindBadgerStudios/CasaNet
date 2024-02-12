@@ -10,7 +10,7 @@ services:
       - nfs-homarr-icons:/app/public/icons
       - nfs-homarr-data:/data
     ports:
-      - "47575:7575"  # <Host Port>:<Container Port>
+      - "7575:7575"  # <Host Port>:<Container Port>
     restart: unless-stopped
 
 volumes: 
