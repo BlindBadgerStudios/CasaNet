@@ -20,6 +20,16 @@ services:
       PASSWORD: ${PASS}
       SUDO_PASSWORD: ${SUDO_PASS}
 
+# Option 1: Use an existing volume
+#volumes:
+#  MYVOLUMENAME: # Replace this with your existing volume name
+#    external: true
+
+# Options 2: Create your own local volume
+#volumes:
+#  nginx-proxy-manager: 
+
+# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
 volumes: 
   nfs-codeserver: 
     driver: local
