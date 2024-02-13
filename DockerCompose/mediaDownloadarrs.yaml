@@ -75,9 +75,9 @@ services:
       - local-sabnzbd:/config
       - local-downloads-completed:/downloads #optional
       - local-downloads-incomplete:/incomplete-downloads #optional
-    network_mode: host
-    #ports:
-    #  - 8081:8080 
+    #network_mode: host
+    ports:
+      - 8080:8080 
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
