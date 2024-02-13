@@ -7,24 +7,10 @@ services:
     restart: always
     volumes:
       - nfs-config:/app/config # Make sure your local config directory exists
-      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+      # - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
     ports: # <Host Port>:<Container Port>
       - "3000:3000" # For primary interface
-#    networks:
-#      macvlan_network:
-#        ipv4_address: ${STATIC_IP}
-    
-#VOLUME CONFIGS
-# Option 1: Use an existing volume
-#volumes:
-#  MYVOLUMENAME: # Replace this with your existing volume name
-#    external: true
-
-# Options 2: Create your own local volume
-#volumes:
-#  nginx-proxy-manager: 
-
-# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
+ 
 volumes: 
   nfs-config: 
     driver: local
@@ -32,16 +18,3 @@ volumes:
       type: nfs
       o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
       device: :${NFS_PATH} # Path for the folder 
-
-#NETWORK CONFIGS
-#networks:
-#  macvlan_network:
-#    driver: macvlan
-#    driver_ops:
-#      parent: eth0
-#    ipam: 
-#      driver: default
-#      config:
-#        - subnet: 192.168.192.0/22
-#          ip_range: 192.168.192.0/22
-#          gateway: 192.168.192.1
