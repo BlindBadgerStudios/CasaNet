@@ -18,7 +18,7 @@ services:
       PGID: ${PGID} # Ex for Synology: 100
   
   sonarr:
-    container_name: sonarr
+    container_name: sonarr-tvshows
     image: ghcr.io/linuxserver/sonarr:latest
     security_opt:
       - no-new-privileges:true
@@ -26,8 +26,24 @@ services:
     ports:
       - 8989:8989
     volumes:
-      - local-sonarr:/config
+      - local-sonarr-tv:/config
       - local-tv:/tv
+      - local-downloads-completed:/downloads
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+  
+  sonarr-anime:
+    container_name: sonarr-anime
+    image: ghcr.io/linuxserver/sonarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 8990:8989
+    volumes:
+      - local-sonarr-anime:/config
       - local-anime:/anime
       - local-downloads-completed:/downloads
     environment:
@@ -76,7 +92,6 @@ services:
       - local-sabnzbd:/config
       - local-downloads-completed:/downloads #optional
       - local-downloads-incomplete:/incomplete-downloads #optional
-    #network_mode: host
     ports:
       - 8080:8080 
     environment:
@@ -104,6 +119,7 @@ volumes:
       type: none
       o: bind
       device: ${MEDIA_PATH}/anime
+
   local-downloads-completed:
     driver: local 
     driver_opts:
@@ -116,24 +132,32 @@ volumes:
       type: none
       o: bind
       device: ${DOWNLOAD_PATH}/incomplete
+
   local-radarr:
     driver: local 
     driver_opts:
       type: none
       o: bind
       device: ${CONFIG_PATH}/radarr
-  local-sonarr:
+  local-sonarr-tv:
     driver: local 
     driver_opts:
       type: none
       o: bind
-      device: ${CONFIG_PATH}/sonarr
+      device: ${CONFIG_PATH}/sonarr-tv
+  local-sonarr-anime:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/sonarr-anime
   local-prowlarr:
     driver: local 
     driver_opts:
       type: none
       o: bind
       device: ${CONFIG_PATH}/prowlarr
+
   local-qbittorrent:
     driver: local 
     driver_opts:
