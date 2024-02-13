@@ -125,3 +125,9 @@ volumes:
       type: none
       o: bind
       device: ${CONFIG_PATH}/qbittorrent
+  local-sabnzbd:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/sabnzbd
