@@ -35,7 +35,7 @@ services:
       PGID: ${PGID} # Ex for Synology: 100
   
   prowlarr:
-    container_name: sonarr
+    container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
     security_opt:
       - no-new-privileges:true
