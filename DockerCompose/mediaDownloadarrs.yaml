@@ -1,0 +1,112 @@
+version: "3"
+services:
+  radarr:
+    container_name: radarr
+    image: ghcr.io/linuxserver/radarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 7878:7878
+    volumes:
+      - local-radarr:/config
+      - local-movies:/movies
+      - local-downloads:/downloads
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+  
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/linuxserver/sonarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 8989:8989
+    volumes:
+      - local-sonarr:/config
+      - local-tv:/tv
+      - local-downloads:/downloads
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+  
+  prowlarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 9696:9696
+    volumes:
+      - local-prowlarr:/config
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+  
+  qbittorrent: 
+    container_name: qbittorrent 
+    image: lscr.io/linuxserver/qbittorrent:latest 
+    restart: unless-stopped
+    ports: 
+      - 8080:8080 
+      - 6881:6881 
+      - 6881:6881/udp 
+    volumes: 
+      - local-qbittorrent:/config 
+      - local-downloads:/downloads
+    environment: 
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+      TZ: America/Los_Angeles
+      WEBUI_PORT: 8080 
+
+#Local volumes for fastest downloads (1Gbps = ~110MB/s), store all under a single folder and automatically use subfolders for each service above
+volumes:
+  local-movies:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MEDIA_PATH}/movies
+  local-tv:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MEDIA_PATH}/tv shows
+  local-downloads:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/qbittorrent/downloads
+  local-radarr:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/radarr
+  local-sonarr:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/sonarr
+  local-prowlarr:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/prowlarr
+  local-qbittorrent:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/qbittorrent
