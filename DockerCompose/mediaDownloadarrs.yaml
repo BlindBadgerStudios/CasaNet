@@ -28,6 +28,7 @@ services:
     volumes:
       - local-sonarr:/config
       - local-tv:/tv
+      - local-anime:/anime
       - local-downloads-completed:/downloads
     environment:
       TZ: America/Los_Angeles
@@ -97,6 +98,12 @@ volumes:
       type: none
       o: bind
       device: ${MEDIA_PATH}/tv shows
+  local-anime:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MEDIA_PATH}/anime
   local-downloads-completed:
     driver: local 
     driver_opts:
