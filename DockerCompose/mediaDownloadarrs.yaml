@@ -11,7 +11,7 @@ services:
     volumes:
       - local-radarr:/config
       - local-movies:/movies
-      - local-downloads:/downloads
+      - local-downloads-completed:/downloads
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -28,7 +28,7 @@ services:
     volumes:
       - local-sonarr:/config
       - local-tv:/tv
-      - local-downloads:/downloads
+      - local-downloads-completed:/downloads
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -59,7 +59,7 @@ services:
       - 6881:6881/udp 
     volumes: 
       - local-qbittorrent:/config 
-      - local-downloads:/downloads
+      - local-downloads-completed:/downloads
     environment: 
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
@@ -73,8 +73,8 @@ services:
     restart: unless-stopped
     volumes:
       - local-sabnzbd:/config
-      - local-downloads:/downloads #optional
-      # - /path/to/incomplete/downloads:/incomplete-downloads #optional
+      - local-downloads-completed:/downloads #optional
+      - local-downloads-incomplete:/incomplete-downloads #optional
     network_mode: host
     #ports:
     #  - 8081:8080 
@@ -97,12 +97,18 @@ volumes:
       type: none
       o: bind
       device: ${MEDIA_PATH}/tv shows
-  local-downloads:
+  local-downloads-completed:
     driver: local 
     driver_opts:
       type: none
       o: bind
-      device: ${CONFIG_PATH}/qbittorrent/downloads
+      device: ${DOWNLOAD_PATH}/completed
+  local-downloads-incomplete:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOWNLOAD_PATH}/incomplete
   local-radarr:
     driver: local 
     driver_opts:
