@@ -66,6 +66,21 @@ services:
       TZ: America/Los_Angeles
       WEBUI_PORT: 8080 
 
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    restart: unless-stopped
+    volumes:
+      - local-sabnzb:/config
+      - local-downloads:/downloads #optional
+      # - /path/to/incomplete/downloads:/incomplete-downloads #optional
+    ports:
+      - 8081:8080 
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: America/Los_Angeles
+
 #Local volumes for fastest downloads (1Gbps = ~110MB/s), store all under a single folder and automatically use subfolders for each service above
 volumes:
   local-movies:
