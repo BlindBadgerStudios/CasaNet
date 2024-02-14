@@ -73,7 +73,7 @@ services:
       - 6881:6881/udp 
     volumes: 
       - local-qbittorrent:/config 
-      - local-downloads-torrents:/media/torrents
+      - local-downloads-torrents:/media/downloads/torrents
     environment: 
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
@@ -87,7 +87,7 @@ services:
     restart: unless-stopped
     volumes:
       - local-sabnzbd:/config
-      - local-downloads-usenet:/media/usenet #optional
+      - local-downloads-usenet:/media/downloads/usenet #optional
     ports:
       - 8080:8080 
     environment:
@@ -106,7 +106,7 @@ volumes:
       o: bind
       device: ${MEDIA_PATH}
 
-#DOWNLOAD_PATH is for the downloaders to store files they are working with
+#DOWNLOAD_PATH is for the downloaders to store files they are working with (e.g. /media/downloads)
   local-downloads-usenet:
     driver: local 
     driver_opts:
