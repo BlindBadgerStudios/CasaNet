@@ -10,8 +10,7 @@ services:
       - 7878:7878
     volumes:
       - local-radarr:/config
-      - local-movies:/movies
-      - local-downloads-completed:/downloads
+      - local-library:/media
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -27,8 +26,7 @@ services:
       - 8989:8989
     volumes:
       - local-sonarr-tv:/config
-      - local-tv:/tv
-      - local-downloads-completed:/downloads
+      - local-library:/media
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -44,8 +42,7 @@ services:
       - 8990:8989
     volumes:
       - local-sonarr-anime:/config
-      - local-anime:/anime
-      - local-downloads-completed:/downloads
+      - local-library:/media
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -76,7 +73,7 @@ services:
       - 6881:6881/udp 
     volumes: 
       - local-qbittorrent:/config 
-      - local-downloads-completed:/downloads
+      - local-downloads-torrents:/media/torrents
     environment: 
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
@@ -90,8 +87,7 @@ services:
     restart: unless-stopped
     volumes:
       - local-sabnzbd:/config
-      - local-downloads-completed:/downloads #optional
-      - local-downloads-incomplete:/incomplete-downloads #optional
+      - local-downloads-usenet:/media/usenet #optional
     ports:
       - 8080:8080 
     environment:
@@ -99,40 +95,32 @@ services:
       PGID: ${PGID}
       TZ: America/Los_Angeles
 
-#Local volumes for fastest downloads (1Gbps = ~110MB/s), store all under a single folder and automatically use subfolders for each service above
+#Local volumes for fastest downloads (1Gbps = ~110MB/s)
 volumes:
-  local-movies:
-    driver: local 
-    driver_opts:
-      type: none
-      o: bind
-      device: ${MEDIA_PATH}/movies
-  local-tv:
-    driver: local 
-    driver_opts:
-      type: none
-      o: bind
-      device: ${MEDIA_PATH}/tv shows
-  local-anime:
-    driver: local 
-    driver_opts:
-      type: none
-      o: bind
-      device: ${MEDIA_PATH}/anime
 
-  local-downloads-completed:
+#MEDIA_PATH is your library folder (e.g. /media/library), this should be your plex/jellyfin library
+  local-library:
     driver: local 
     driver_opts:
       type: none
       o: bind
-      device: ${DOWNLOAD_PATH}/completed
-  local-downloads-incomplete:
-    driver: local 
-    driver_opts:
-      type: none
-      o: bind
-      device: ${DOWNLOAD_PATH}/incomplete
+      device: ${MEDIA_PATH}
 
+#DOWNLOAD_PATH is for the downloaders to store files they are working with
+  local-downloads-usenet:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOWNLOAD_PATH}/usenet
+  local-downloads-torrents:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOWNLOAD_PATH}/torrents
+
+#CONFIG_PATH is for application configuration directories
   local-radarr:
     driver: local 
     driver_opts:
