@@ -10,7 +10,7 @@ services:
       - 7878:7878
     volumes:
       - local-radarr:/config
-      - local-library:/media
+      - local-root:/media
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -26,7 +26,7 @@ services:
       - 8989:8989
     volumes:
       - local-sonarr-tv:/config
-      - local-library:/media
+      - local-root:/media
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -42,7 +42,7 @@ services:
       - 8990:8989
     volumes:
       - local-sonarr-anime:/config
-      - local-library:/media
+      - local-root:/media
     environment:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
@@ -98,15 +98,15 @@ services:
 #Local volumes for fastest downloads (1Gbps = ~110MB/s)
 volumes:
 
-#MEDIA_PATH is your library folder (e.g. /media/library), this should be your plex/jellyfin library
-  local-library:
+#MEDIA_ROOT is the root folder of the structure (e.g. /media), this should contain your plex/jellyfin library and the download folders
+  local-root:
     driver: local 
     driver_opts:
       type: none
       o: bind
-      device: ${MEDIA_PATH}
+      device: ${MEDIA_ROOT}
 
-#DOWNLOAD_PATH is for the downloaders to store files they are working with (e.g. /media/downloads)
+#DOWNLOAD_PATH is for the downloaders to store files they are working with (e.g. /media/downloads), this should be nested under the MEDIA_ROOT
   local-downloads-usenet:
     driver: local 
     driver_opts:
@@ -120,7 +120,7 @@ volumes:
       o: bind
       device: ${DOWNLOAD_PATH}/torrents
 
-#CONFIG_PATH is for application configuration directories
+#CONFIG_PATH is for application configuration directories, this can be anywhere you want to store the configs for each application
   local-radarr:
     driver: local 
     driver_opts:
