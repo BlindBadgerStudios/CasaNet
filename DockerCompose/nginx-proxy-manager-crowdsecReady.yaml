@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nginx-proxy-manager:
-    image: Lepresidente/nginxproxymanager:latest #Crowdsec community supported image with NPM remediation component baked in
+    image: lepresidente/nginxproxymanager:latest #Crowdsec community supported image with NPM remediation component baked in
     container_name: nginx-proxy-manager
     restart: always
     volumes:
@@ -12,21 +12,7 @@ services:
       - "80:80" # For proxying on HTTP
       - "443:443" # For proxying on HTTPS
       - "81:81" # For the admin portal
-#    networks:
-#      macvlan_network:
-#        ipv4_address: ${STATIC_IP}
-    
-#VOLUME CONFIGS
-# Option 1: Use an existing volume
-#volumes:
-#  MYVOLUMENAME: # Replace this with your existing volume name
-#    external: true
 
-# Options 2: Create your own local volume
-#volumes:
-#  nginx-proxy-manager: 
-
-# Option 3: Create a volume that maps to a NFS volume (set NFS_SERVER and NFS_PATH to the necessary NFS connection information)
 volumes: 
   nfs-data: 
     driver: local
@@ -40,16 +26,3 @@ volumes:
       type: nfs
       o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
       device: :${NFS_PATH}/letsencrypt # Path for the NPM LetsEncrypt folder
-
-#NETWORK CONFIGS
-#networks:
-#  macvlan_network:
-#    driver: macvlan
-#    driver_ops:
-#      parent: eth0
-#    ipam: 
-#      driver: default
-#      config:
-#        - subnet: 192.168.192.0/22
-#          ip_range: 192.168.192.0/22
-#          gateway: 192.168.192.1
