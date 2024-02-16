@@ -47,6 +47,22 @@ services:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
+    
+  readarr:
+    container_name: readarr
+    image: lscr.io/linuxserver/readarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports: 
+      - 8787:8787
+    volumes: 
+      - local-readarr:/config
+      - local-root:/media
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
   
   prowlarr:
     container_name: prowlarr
@@ -139,6 +155,12 @@ volumes:
       type: none
       o: bind
       device: ${CONFIG_PATH}/sonarr-anime
+  local-readarr:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/readarr
   local-prowlarr:
     driver: local 
     driver_opts:
