@@ -1,5 +1,38 @@
 version: "3"
 services:
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 9696:9696
+    volumes:
+      - local-prowlarr:/config
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+  
+  flaresolverr:
+    container_name: flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 8191:8191
+    volumes:
+      - local-prowlarr:/config
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_HTML: ${LOG_HTML:-false}
+      CAPTCHA_SOLVER: ${CAPTCHA_SOLVER:-none}
+
   radarr:
     container_name: radarr
     image: ghcr.io/linuxserver/radarr:latest
@@ -64,21 +97,6 @@ services:
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
   
-  prowlarr:
-    container_name: prowlarr
-    image: lscr.io/linuxserver/prowlarr:latest
-    security_opt:
-      - no-new-privileges:true
-    restart: unless-stopped
-    ports:
-      - 9696:9696
-    volumes:
-      - local-prowlarr:/config
-    environment:
-      TZ: America/Los_Angeles
-      PUID: ${PUID} # Ex for Synology: 1026
-      PGID: ${PGID} # Ex for Synology: 100
-  
   qbittorrent: 
     container_name: qbittorrent 
     image: lscr.io/linuxserver/qbittorrent:latest 
@@ -137,6 +155,12 @@ volumes:
       device: ${DOWNLOAD_PATH}/torrents
 
 #CONFIG_PATH is for application configuration directories, this can be anywhere you want to store the configs for each application
+  local-prowlarr:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/prowlarr
   local-radarr:
     driver: local 
     driver_opts:
@@ -161,12 +185,6 @@ volumes:
       type: none
       o: bind
       device: ${CONFIG_PATH}/readarr
-  local-prowlarr:
-    driver: local 
-    driver_opts:
-      type: none
-      o: bind
-      device: ${CONFIG_PATH}/prowlarr
 
   local-qbittorrent:
     driver: local 
