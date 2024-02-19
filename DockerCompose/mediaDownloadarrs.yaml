@@ -83,7 +83,7 @@ services:
     
   readarr:
     container_name: readarr
-    image: lscr.io/linuxserver/readarr:latest
+    image: lscr.io/linuxserver/readarr:develop
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
