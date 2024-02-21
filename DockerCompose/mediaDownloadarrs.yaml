@@ -96,6 +96,22 @@ services:
       TZ: America/Los_Angeles
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
+
+  readarr-audio:
+    container_name: readarr-audio
+    image: lscr.io/linuxserver/readarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports: 
+      - 8787:8787
+    volumes: 
+      - local-readarr-audio:/config
+      - local-root:/media
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
   
   qbittorrent: 
     container_name: qbittorrent 
@@ -185,6 +201,12 @@ volumes:
       type: none
       o: bind
       device: ${CONFIG_PATH}/readarr
+  local-readarr-audio:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/readarr-audio
 
   local-qbittorrent:
     driver: local 
