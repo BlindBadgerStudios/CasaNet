@@ -99,7 +99,7 @@ services:
 
   readarr-audio:
     container_name: readarr-audio
-    image: lscr.io/linuxserver/readarr:latest
+    image: lscr.io/linuxserver/readarr:develop
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
