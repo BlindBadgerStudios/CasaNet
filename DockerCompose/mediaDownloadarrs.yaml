@@ -49,8 +49,24 @@ services:
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
   
+  radarr-4k:
+    container_name: radarr-4k
+    image: ghcr.io/linuxserver/radarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 7878:7878
+    volumes:
+      - local-radarr4k:/config
+      - local-root:/media
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+  
   sonarr:
-    container_name: sonarr-tvshows
+    container_name: sonarr
     image: ghcr.io/linuxserver/sonarr:latest
     security_opt:
       - no-new-privileges:true
@@ -65,8 +81,8 @@ services:
       PUID: ${PUID} # Ex for Synology: 1026
       PGID: ${PGID} # Ex for Synology: 100
   
-  sonarr-anime:
-    container_name: sonarr-anime
+  sonarr-4k:
+    container_name: sonarr-4k
     image: ghcr.io/linuxserver/sonarr:latest
     security_opt:
       - no-new-privileges:true
@@ -74,7 +90,7 @@ services:
     ports:
       - 8990:8989
     volumes:
-      - local-sonarr-anime:/config
+      - local-sonarr4k:/config
       - local-root:/media
     environment:
       TZ: America/Los_Angeles
@@ -198,18 +214,24 @@ volumes:
       type: none
       o: bind
       device: ${CONFIG_PATH}/radarr
-  local-sonarr-tv:
+  local-radarr4k:
     driver: local 
     driver_opts:
       type: none
       o: bind
-      device: ${CONFIG_PATH}/sonarr-tv
-  local-sonarr-anime:
+      device: ${CONFIG_PATH}/radarr4k
+  local-sonarr:
     driver: local 
     driver_opts:
       type: none
       o: bind
-      device: ${CONFIG_PATH}/sonarr-anime
+      device: ${CONFIG_PATH}/sonarr
+  local-sonarr4k:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/sonarr4k
   local-readarr:
     driver: local 
     driver_opts:
