@@ -74,7 +74,7 @@ services:
     ports:
       - 8989:8989
     volumes:
-      - local-sonarr-tv:/config
+      - local-sonarr:/config
       - local-root:/media
     environment:
       TZ: America/Los_Angeles
