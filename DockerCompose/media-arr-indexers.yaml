@@ -33,21 +33,6 @@ services:
       LOG_HTML: ${LOG_HTML:-false}
       CAPTCHA_SOLVER: ${CAPTCHA_SOLVER:-none}
 
-  overseerr:
-    container_name: overseer
-    image: sctx/overseerr:latest
-    restart: unless-stopped
-    ports:
-      - 5055:5055
-    volumes:
-      - local-overseerr:/app/config
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: America/Los_Angeles
-      PORT: 5055
-      LOG_LEVEL: debug
-
 #Local volumes for fastest downloads (1Gbps = ~110MB/s)
 volumes:
 
@@ -58,10 +43,3 @@ volumes:
       type: none
       o: bind
       device: ${CONFIG_PATH}/prowlarr
-  
-  local-overseerr:
-    driver: local 
-    driver_opts:
-      type: none
-      o: bind
-      device: ${CONFIG_PATH}/overseerr
