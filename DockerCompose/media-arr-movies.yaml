@@ -1,0 +1,58 @@
+version: "3"
+services:
+  radarr:
+    container_name: radarr
+    image: ghcr.io/linuxserver/radarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 7878:7878
+    volumes:
+      - local-radarr:/config
+      - local-root:/media
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+  
+  radarr-4k:
+    container_name: radarr-4k
+    image: ghcr.io/linuxserver/radarr:latest
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - 7879:7878
+    volumes:
+      - local-radarr4k:/config
+      - local-root:/media
+    environment:
+      TZ: America/Los_Angeles
+      PUID: ${PUID} # Ex for Synology: 1026
+      PGID: ${PGID} # Ex for Synology: 100
+
+#Local volumes for fastest downloads (1Gbps = ~110MB/s)
+volumes:
+
+#MEDIA_ROOT is the root folder of the structure (e.g. /media), this should contain your plex/jellyfin library and the download folders
+  local-root:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MEDIA_ROOT}
+
+#CONFIG_PATH is for application configuration directories, this can be anywhere you want to store the configs for each application
+  local-radarr:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/radarr
+  local-radarr4k:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/radarr4k
