@@ -47,6 +47,19 @@ services:
       TZ: America/Los_Angeles
       #PORT: 5055
       LOG_LEVEL: debug
+  
+  tautulli:
+    image: ghcr.io/tautulli/tautulli
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - local-tautulli:/config
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: America/Los_Angeles
+    ports:
+      - 8181:8181
 
 #Local volumes for fastest downloads (1Gbps = ~110MB/s)
 volumes:
@@ -65,3 +78,10 @@ volumes:
       type: none
       o: bind
       device: ${CONFIG_PATH}/overseerr
+
+  local-tautulli:
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/tautulli
