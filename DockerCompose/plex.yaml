@@ -22,16 +22,36 @@ services:
       VERSION: public
       PLEX_CLAIM: ${PLEX_CLAIM_CODE} #Obtain from URL just before deployment: https://www.plex.tv/claim/
 
+  tautulli:
+    image: ghcr.io/tautulli/tautulli
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - local-tautulli:/config
+    environment:
+      TZ: America/Los_Angeles
+      PUID: 1026
+      PGID: 100
+    ports:
+      - 8181:8181
+
 volumes:
   local-plexconfig: #Must be a locally bound location, NFS causes corruption for the DB
     driver: local 
     driver_opts:
       type: none
       o: bind
-      device: ${CONFIG_PATH}
+      device: ${CONFIG_PATH}/plex
   nfs-plexlibrary: 
     driver: local
     driver_opts:
       type: nfs
       o: addr=${NFS_SERVER},rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4
       device: :${NFS_PATH} # Path for the config data folder (e.g. /volume1/docker/corosync)
+
+  local-tautulli: #Must be a locally bound location, NFS causes corruption for the DB
+    driver: local 
+    driver_opts:
+      type: none
+      o: bind
+      device: ${CONFIG_PATH}/tautulli
